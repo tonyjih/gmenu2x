@@ -431,35 +431,21 @@ void GMenu2X::viewLog() {
 }
 
 void GMenu2X::readConfig() {
-	string conffile = GMENU2X_SYSTEM_DIR "/gmenu2x.conf";
+	string conffile = getHome() + "/gmenu2x.conf";
 	readConfig(conffile);
 
-	conffile = getHome() + "/gmenu2x.conf";
+	sanitizeConfig();
+
+	conffile = GMENU2X_SYSTEM_DIR "/gmenu2x.conf";
 	readConfig(conffile);
-}
-
-void GMenu2X::readConfig(string conffile) {
-	ifstream inf(conffile.c_str(), ios_base::in);
-	if (inf.is_open()) {
-		string line;
-		while (getline(inf, line, '\n')) {
-			string::size_type pos = line.find("=");
-			string name = trim(line.substr(0,pos));
-			string value = trim(line.substr(pos+1));
-
-			if (value.length()>1 && value.at(0)=='"' && value.at(value.length()-1)=='"')
-				confStr[name] = value.substr(1,value.length()-2);
-			else
-				confInt[name] = atoi(value.c_str());
-		}
-		inf.close();
-	}
 
 	if (!confStr["lang"].empty())
 		tr.setLang(confStr["lang"]);
+}
 
+void GMenu2X::sanitizeConfig() {
 	if (!confStr["wallpaper"].empty() && !fileExists(confStr["wallpaper"]))
-		confStr["wallpaper"] = "";
+		confStr.erase("wallpaper");
 
 	if (confStr["skin"].empty() || sc.getSkinPath(confStr["skin"]).empty())
 		confStr["skin"] = "Default";
@@ -470,7 +456,40 @@ void GMenu2X::readConfig(string conffile) {
 	evalIntConf( confInt, "buttonRepeatRate", 10, 0, 20 );
 	evalIntConf( confInt, "videoBpp", 32, 16, 32 );
 
-	if (confStr["tvoutEncoding"] != "PAL") confStr["tvoutEncoding"] = "NTSC";
+	if (confStr["tvoutEncoding"] != "PAL")
+		confStr["tvoutEncoding"] = "NTSC";
+
+	/* We don't want the paths to be saved in the config */
+	confStr.erase("brightnessSysfs");
+	confStr.erase("powerSupplySysfs");
+	confStr.erase("batterySysfs");
+}
+
+void GMenu2X::readConfig(string conffile) {
+	ifstream inf(conffile.c_str(), ios_base::in);
+
+	if (!inf.is_open())
+		return;
+
+	string line;
+	while (getline(inf, line, '\n')) {
+		string::size_type pos = line.find("=");
+		string name = trim(line.substr(0, pos));
+		string value = trim(line.substr(pos + 1));
+
+		if (value.length() > 1 && value.at(0) == '"' &&
+		    value.at(value.length() - 1) == '"') {
+			if (confStr.find(name) == confStr.end() ||
+			    confStr[name] == "")
+				confStr[name] = value.substr(1, value.length() - 2);
+		}
+		else {
+			if (confInt.find(name) == confInt.end())
+			confInt[name] = atoi(value.c_str());
+		}
+	}
+
+	inf.close();
 }
 
 void GMenu2X::saveSelection() {

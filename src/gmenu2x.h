@@ -94,6 +94,7 @@ private:
 	int lastSelectorElement;
 	void readConfig();
 	void readConfig(std::string path);
+	void sanitizeConfig();
 	void readTmp();
 
 	void initServices();

@@ -91,7 +91,7 @@ int MessageBox::exec() {
 	}
 	gmenu2x.font->write(bg, text, box.x + TEXT_PADDING + (gmenu2x.sc[icon] ? ICON_PADDING + ICON_DIMENSION : 0), box.y + (box.h - textHeight) / 2, Font::HAlignLeft, Font::VAlignTop);
 
-	int btnX = box.x - 6;
+	int btnX = box.x + box.w - 6;
 	for (size_t i = 0; i < InputManager::BUTTON_TYPE_SIZE; i++) {
 		if (!buttons[i].empty()) {
 			buttonPositions[i].y = box.y+box.h+8;

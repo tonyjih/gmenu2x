@@ -252,7 +252,7 @@ void Menu::paint(Surface &s) {
 			l_button->blit(s, 0, 0);
 		auto r_button = sc.skinRes("imgs/section-r.png");
 		if (r_button)
-			r_button->blit(s, width - 10, 0);
+			r_button->blit(s, width - r_button->width(), 0);
 	}
 
 	auto& sectionLinks = links[iSection];

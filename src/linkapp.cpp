@@ -439,13 +439,13 @@ void LinkApp::showManual() {
 
 	// Png manuals
 	if (manual.substr(manual.size()-8,8)==".man.png") {
-		auto pngman = OffscreenSurface::loadImage(manual);
+		auto pngman = OffscreenSurface::loadImage(gmenu2x, manual);
 		if (!pngman) {
 			return;
 		}
-		auto bg = OffscreenSurface::loadImage(gmenu2x.confStr["wallpaper"]);
+		auto bg = OffscreenSurface::loadImage(gmenu2x, gmenu2x.confStr["wallpaper"]);
 		if (!bg) {
-			bg = OffscreenSurface::emptySurface(gmenu2x.width(), gmenu2x.height());
+			bg = OffscreenSurface::emptySurface(gmenu2x, gmenu2x.width(), gmenu2x.height());
 		}
 		bg->convertToDisplayFormat();
 

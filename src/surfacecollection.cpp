@@ -108,7 +108,7 @@ OffscreenSurface *SurfaceCollection::add(const string &path) {
 	}
 
 	DEBUG("Adding surface: '%s'\n", path.c_str());
-	auto surface = OffscreenSurface::loadImage(filePath);
+	auto surface = OffscreenSurface::loadImage(*gmenu2x, filePath);
 	if (surface == nullptr) return nullptr;
 	return (surfaces[path] = std::move(surface)).get();
 }
@@ -122,7 +122,7 @@ OffscreenSurface *SurfaceCollection::addSkinRes(const string &path, bool useDefa
 		return NULL;
 
 	DEBUG("Adding skin surface: '%s'\n", path.c_str());
-	auto surface = OffscreenSurface::loadImage(skinpath);
+	auto surface = OffscreenSurface::loadImage(*gmenu2x, skinpath);
 	if (surface == nullptr) return nullptr;
 	return (surfaces[path] = std::move(surface)).get();
 }

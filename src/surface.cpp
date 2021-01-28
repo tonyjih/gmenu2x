@@ -22,6 +22,7 @@
 
 #include "compat-algorithm.h"
 #include "debug.h"
+#include "gmenu2x.h"
 #include "imageio.h"
 #include "utilities.h"
 #include "buildopts.h"
@@ -29,6 +30,8 @@
 #include <cassert>
 #include <iomanip>
 #include <utility>
+
+#include <SDL_rotozoom.h>
 
 using namespace std;
 
@@ -282,22 +285,38 @@ void Surface::fillRectAlpha(SDL_Rect rect, RGBAColor c) {
 // OffscreenSurface:
 
 unique_ptr<OffscreenSurface> OffscreenSurface::emptySurface(
-		int width, int height)
+		const GMenu2X &gmenu2x, int width, int height)
 {
-	SDL_Surface *raw = SDL_CreateRGBSurface(
+	unsigned int uiScale = gmenu2x.getUiScale();
+	SDL_Surface *stretched,
+		    *raw = SDL_CreateRGBSurface(
 			SDL_SWSURFACE, width, height, 32, 0, 0, 0, 0);
 	if (!raw) return unique_ptr<OffscreenSurface>();
 	SDL_FillRect(raw, nullptr, SDL_MapRGB(raw->format, 0, 0, 0));
+
+	if (uiScale > 1) {
+		stretched = zoomSurface(raw, uiScale, uiScale, true);
+		SDL_FreeSurface(raw);
+		raw = stretched;
+	}
+
 	return unique_ptr<OffscreenSurface>(new OffscreenSurface(raw));
 }
 
 unique_ptr<OffscreenSurface> OffscreenSurface::loadImage(
-		string const& img, bool loadAlpha)
+		const GMenu2X &gmenu2x, string const& img, bool loadAlpha)
 {
-	SDL_Surface *raw = loadPNG(img, loadAlpha);
+	unsigned int uiScale = gmenu2x.getUiScale();
+	SDL_Surface *stretched, *raw = loadPNG(img, loadAlpha);
 	if (!raw) {
 		DEBUG("Couldn't load surface '%s'\n", img.c_str());
 		return unique_ptr<OffscreenSurface>();
+	}
+
+	if (uiScale > 1) {
+		stretched = zoomSurface(raw, uiScale, uiScale, true);
+		SDL_FreeSurface(raw);
+		raw = stretched;
 	}
 
 	return unique_ptr<OffscreenSurface>(new OffscreenSurface(raw));

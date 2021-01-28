@@ -31,6 +31,8 @@
 #include <ostream>
 #include <string>
 
+class GMenu2X;
+
 struct RGBAColor {
 	uint8_t r, g, b, a;
 	static RGBAColor fromString(std::string const& strColor);
@@ -108,9 +110,10 @@ private:
 class OffscreenSurface: public Surface {
 public:
 	static std::unique_ptr<OffscreenSurface> emptySurface(
-			int width, int height);
+			const GMenu2X &gmenu2x, int width, int height);
 	static std::unique_ptr<OffscreenSurface> loadImage(
-			std::string const& img, bool loadAlpha = true);
+			const GMenu2X &gmenu2x, std::string const& img,
+			bool loadAlpha = true);
 
 	OffscreenSurface(Surface const& other) : Surface(other) {}
 	OffscreenSurface(OffscreenSurface const& other) : Surface(other) {}

@@ -118,6 +118,10 @@ public:
 		return getHome() + "/gmenu2x.log";
 	}
 
+	const unsigned int getUiScale() const {
+		return const_cast<ConfIntHash&>(skinConfInt)["uiScale"];
+	}
+
 	/* Returns the home directory of gmenu2x, usually
 	 * ~/.gmenu2x */
 	static const std::string getHome();

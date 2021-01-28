@@ -289,9 +289,9 @@ void GMenu2X::initBG() {
 	bgmain.reset();
 
 	// Load wallpaper.
-	bg = OffscreenSurface::loadImage(confStr["wallpaper"]);
+	bg = OffscreenSurface::loadImage(*this, confStr["wallpaper"]);
 	if (!bg) {
-		bg = OffscreenSurface::emptySurface(width(), height());
+		bg = OffscreenSurface::emptySurface(*this, width(), height());
 	}
 
 	drawTopBar(*bg);
@@ -300,7 +300,7 @@ void GMenu2X::initBG() {
 	bgmain.reset(new OffscreenSurface(*bg));
 
 	{
-		auto sd = OffscreenSurface::loadImage(
+		auto sd = OffscreenSurface::loadImage(*this,
 				sc.getSkinFilePath("imgs/sd.png"));
 		if (sd) sd->blit(*bgmain, 3, bottomBarIconY);
 	}
@@ -310,7 +310,7 @@ void GMenu2X::initBG() {
 
 #ifdef ENABLE_CPUFREQ
 	{
-		auto cpu_img = OffscreenSurface::loadImage(
+		auto cpu_img = OffscreenSurface::loadImage(*this,
 				sc.getSkinFilePath("imgs/cpu.png"));
 		if (cpu_img) cpu_img->blit(*bgmain, cpuX, bottomBarIconY);
 	}

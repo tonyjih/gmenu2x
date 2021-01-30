@@ -70,7 +70,7 @@ protected:
 	bool edited;
 	std::string launchMsg, icon, iconPath;
 
-	OffscreenSurface *iconSurface;
+	std::shared_ptr<OffscreenSurface> iconSurface;
 	std::unique_ptr<OffscreenSurface> titleSurface;
 	std::unique_ptr<OffscreenSurface> descriptionSurface;
 

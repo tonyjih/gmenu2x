@@ -1054,7 +1054,7 @@ void GMenu2X::drawScrollBar(uint32_t pageSize, uint32_t totalSize, uint32_t page
 }
 
 void GMenu2X::drawTopBar(Surface& surface) {
-	Surface *bar = nullptr;
+	std::shared_ptr<OffscreenSurface> bar;
 	if (!skinConfInt["topBarBgUseColor"])
 		bar = sc.skinRes("imgs/topbar.png", false);
 	if (bar) {
@@ -1068,7 +1068,7 @@ void GMenu2X::drawTopBar(Surface& surface) {
 }
 
 void GMenu2X::drawBottomBar(Surface& surface) {
-	Surface *bar = nullptr;
+	std::shared_ptr<OffscreenSurface> bar;
 	if (!skinConfInt["bottomBarBgUseColor"])
 		bar = sc.skinRes("imgs/bottombar.png", false);
 	if (bar) {

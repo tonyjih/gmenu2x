@@ -1,6 +1,7 @@
 #ifndef __BATTERY_H__
 #define __BATTERY_H__
 
+#include <memory>
 #include <string>
 
 class GMenu2X;
@@ -18,7 +19,7 @@ public:
 	/**
 	 * Gets the icon that reflects the current battery status.
 	 */
-	const OffscreenSurface *getIcon();
+	std::shared_ptr<OffscreenSurface> getIcon();
 
 private:
 	void update();

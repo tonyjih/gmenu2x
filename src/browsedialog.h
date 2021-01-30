@@ -69,9 +69,9 @@ private:
 	unsigned int numRows;
 	unsigned int rowHeight;
 
-	OffscreenSurface *iconGoUp;
-	OffscreenSurface *iconFolder;
-	OffscreenSurface *iconFile;
+	std::shared_ptr<OffscreenSurface> iconGoUp;
+	std::shared_ptr<OffscreenSurface> iconFolder;
+	std::shared_ptr<OffscreenSurface> iconFile;
 
 	ButtonBox buttonBox;
 

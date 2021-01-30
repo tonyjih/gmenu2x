@@ -11,7 +11,7 @@ Dialog::Dialog(GMenu2X& gmenu2x) : gmenu2x(gmenu2x)
 
 void Dialog::drawTitleIcon(Surface& s, const std::string &icon, bool skinRes)
 {
-	Surface *i = NULL;
+	std::shared_ptr<OffscreenSurface> i;
 	if (!icon.empty()) {
 		if (skinRes)
 			i = gmenu2x.sc.skinRes(icon);
@@ -19,7 +19,7 @@ void Dialog::drawTitleIcon(Surface& s, const std::string &icon, bool skinRes)
 			i = gmenu2x.sc[icon];
 	}
 
-	if (i==NULL)
+	if (!i)
 		i = gmenu2x.sc.skinRes("icons/generic.png");
 
 	i->blit(s, 4, (gmenu2x.skinConfInt["topBarHeight"] - 32) / 2);

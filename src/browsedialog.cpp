@@ -244,7 +244,7 @@ void BrowseDialog::paint()
 	//Files & Directories
 	s.setClipRect(clipRect);
 	for (i = firstElement; i < lastElement; i++) {
-		Surface *icon;
+		std::shared_ptr<OffscreenSurface> icon;
 		if (fl.isDirectory(i)) {
 			if (fl[i] == "..") {
 				icon = iconGoUp;

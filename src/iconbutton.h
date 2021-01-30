@@ -6,6 +6,7 @@
 #include <SDL.h>
 
 #include <functional>
+#include <memory>
 #include <string>
 
 class OffscreenSurface;
@@ -33,7 +34,7 @@ private:
 	Action action;
 
 	SDL_Rect rect, iconRect, labelRect;
-	OffscreenSurface *iconSurface;
+	std::shared_ptr<OffscreenSurface> iconSurface;
 };
 
 #endif

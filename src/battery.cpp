@@ -119,7 +119,7 @@ Battery::Battery(GMenu2X& gmenu2x) : sc(gmenu2x.sc)
 	update();
 }
 
-const OffscreenSurface *Battery::getIcon()
+std::shared_ptr<OffscreenSurface> Battery::getIcon()
 {
 	// Check battery status every 60 seconds.
 	unsigned int now = SDL_GetTicks();

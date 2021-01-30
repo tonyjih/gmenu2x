@@ -224,9 +224,11 @@ void Menu::paint(Surface &s) {
 	for (int i = leftSection; i <= rightSection; i++) {
 		uint32_t j = (centerSection + numSections + i) % numSections;
 		string sectionIcon = "skin:sections/" + sections[j] + ".png";
-		Surface *icon = sc.exists(sectionIcon)
+
+		std::shared_ptr<OffscreenSurface> icon = sc.exists(sectionIcon)
 				? sc[sectionIcon]
 				: sc.skinRes("icons/section.png");
+
 		int x = width / 2 + i * linkWidth + sectionDelta;
 		if (i == leftSection) {
 			int t = sectionDelta > 0 ? linkWidth - sectionDelta : -sectionDelta;

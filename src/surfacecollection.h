@@ -44,19 +44,19 @@ public:
 
 	void debug();
 
-	OffscreenSurface *addSkinRes(const std::string &path, bool useDefault = true);
+	std::shared_ptr<OffscreenSurface> addSkinRes(const std::string &path, bool useDefault = true);
 	void     del(const std::string &path);
 	void     clear();
 	void     move(const std::string &from, const std::string &to);
 	bool     exists(const std::string &path);
 
-	OffscreenSurface *operator[](const std::string &);
-	OffscreenSurface *skinRes(const std::string &key, bool useDefault = true);
+	std::shared_ptr<OffscreenSurface> operator[](const std::string &);
+	std::shared_ptr<OffscreenSurface> skinRes(const std::string &key, bool useDefault = true);
 
 private:
-	using SurfaceHash = std::unordered_map<std::string, std::unique_ptr<OffscreenSurface>>;
+	using SurfaceHash = std::unordered_map<std::string, std::shared_ptr<OffscreenSurface>>;
 
-	OffscreenSurface *add(const std::string &path);
+	std::shared_ptr<OffscreenSurface> add(const std::string &path);
 
 	SurfaceHash surfaces;
 	std::string skin;

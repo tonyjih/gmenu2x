@@ -776,6 +776,18 @@ void GMenu2X::setSkin(const string &skin, bool setWallpaper) {
 	if (!readSkinConfig(getLocalSkinPath(skin) + "/skin.conf"))
 		readSkinConfig(getSystemSkinPath(skin) + "/skin.conf");
 
+	if (!skinConfInt["topBarBgUseColor"]) {
+		std::shared_ptr<OffscreenSurface> bar = sc.skinRes("imgs/topbar.png", false);
+		if (bar)
+			skinConfInt["topBarHeight"] = bar->height();
+	}
+
+	if (!skinConfInt["bottomBarBgUseColor"]) {
+		std::shared_ptr<OffscreenSurface> bar = sc.skinRes("imgs/bottombar.png", false);
+		if (bar)
+			skinConfInt["bottomBarHeight"] = bar->height();
+	}
+
 	if (setWallpaper && !skinConfStr["wallpaper"].empty()) {
 		string fp = sc.getSkinFilePath("wallpapers/" + skinConfStr["wallpaper"]);
 		if (!fp.empty())

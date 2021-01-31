@@ -85,23 +85,16 @@ private:
 	*/
 	void explorer();
 
-	bool inet, //!< Represents the configuration of the basic network services. @see readCommonIni @see usbnet @see samba @see web
-		usbnet,
-		samba,
-		web;
-
-	std::string ip, defaultgw, lastSelectorDir;
+	std::string lastSelectorDir;
 	int lastSelectorElement;
 	void readConfig();
 	void readConfig(std::string path);
 	void sanitizeConfig();
 	void readTmp();
 
-	void initServices();
-	
 	// Returns true if the font has changed.
 	bool initFont();
-	
+
 	void initMenu();
 	void initBG();
 

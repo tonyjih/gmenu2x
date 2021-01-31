@@ -187,7 +187,6 @@ void GMenu2X::run() {
 
 GMenu2X::GMenu2X() : input(*this), sc(this)
 {
-	usbnet = samba = inet = web = false;
 	useSelectionPng = false;
 
 	powerSaver = PowerSaver::getInstance();
@@ -320,29 +319,6 @@ void GMenu2X::initBG() {
 #else
 	manualX = cpuX;
 #endif
-
-	int serviceX = width() - 38;
-	if (usbnet) {
-		if (web) {
-			auto webserver = OffscreenSurface::loadImage(
-					sc.getSkinFilePath("imgs/webserver.png"));
-			if (webserver) webserver->blit(*bgmain, serviceX, bottomBarIconY);
-			serviceX -= 19;
-		}
-		if (samba) {
-			auto sambaS = OffscreenSurface::loadImage(
-					sc.getSkinFilePath("imgs/samba.png"));
-			if (sambaS) sambaS->blit(*bgmain, serviceX, bottomBarIconY);
-			serviceX -= 19;
-		}
-		if (inet) {
-			auto inetS = OffscreenSurface::loadImage(
-					sc.getSkinFilePath("imgs/inet.png"));
-			if (inetS) inetS->blit(*bgmain, serviceX, bottomBarIconY);
-			serviceX -= 19;
-		}
-	}
-	(void)serviceX;
 
 	bgmain->convertToDisplayFormat();
 }

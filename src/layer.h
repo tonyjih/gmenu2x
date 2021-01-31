@@ -5,6 +5,7 @@
 #define LAYER_H
 
 #include "inputmanager.h"
+#include "layout.h"
 
 class Surface;
 
@@ -13,7 +14,7 @@ class Surface;
  * Abstract base class for UI layers.
  * A layer handles both painting and input events.
  */
-class Layer {
+class Layer : public LayoutItem {
 public:
 	enum class Status { DISMISSED, NORMAL };
 

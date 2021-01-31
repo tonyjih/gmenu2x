@@ -36,6 +36,7 @@
 #include <string>
 #include <vector>
 
+class BottomBar;
 class BrightnessManager;
 class Button;
 class FontStack;
@@ -43,6 +44,8 @@ class HelpPopup;
 class IconButton;
 class Launcher;
 class Layer;
+class Layout;
+class LayoutItem;
 class MediaMonitor;
 class Menu;
 
@@ -74,11 +77,9 @@ private:
 
 	std::vector<std::shared_ptr<Layer>> layers;
 
-	/*!
-	Retrieves the free disk space on the sd
-	@return String containing a human readable representation of the free disk space
-	*/
-	std::string getDiskFree(const char *path);
+	std::unique_ptr<Layout> layout;
+	std::shared_ptr<LayoutItem> top;
+	std::shared_ptr<BottomBar> bottomBar;
 
 	/*!
 	Displays a selector and launches the specified executable file
@@ -128,6 +129,9 @@ public:
 
 	const unsigned int width() const { return s->width(); }
 	const unsigned int height() const { return s->height(); }
+
+	void enableManualIcon(bool enable);
+	void showCpuFreq(unsigned long mhz = 0);
 
 	/*
 	 * Variables needed for elements disposition

@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "background.h"
+#include "bottombar.h"
 #include "brightnessmanager.h"
 #include "buildopts.h"
 #include "cpu.h"
@@ -32,6 +33,7 @@
 #include "iconbutton.h"
 #include "inputdialog.h"
 #include "launcher.h"
+#include "layout.h"
 #include "linkapp.h"
 #include "mediamonitor.h"
 #include "menu.h"
@@ -190,6 +192,8 @@ GMenu2X::GMenu2X() : input(*this), sc(this)
 	useSelectionPng = false;
 
 	powerSaver = PowerSaver::getInstance();
+	layout = std::make_unique<Layout>();
+	top = layout->topItem();
 
 	/* Do not clear the screen on exit.
 	 * This may require an SDL patch available at
@@ -235,6 +239,9 @@ GMenu2X::GMenu2X() : input(*this), sc(this)
 
 	DEBUG("%ux%u main window created\n", width(), height());
 
+	top->setSize(width(), height());
+	top->setContainer(LAY_FLEX | LAY_COLUMN);
+
 	//load config data
 	readConfig();
 
@@ -253,13 +260,26 @@ GMenu2X::GMenu2X() : input(*this), sc(this)
 	bg = NULL;
 	font = NULL;
 	setSkin(confStr["skin"], !fileExists(confStr["wallpaper"]));
-	layers.insert(layers.begin(), make_shared<Background>(*this));
+
+	auto topBar = std::make_shared<LayoutItem>();
+	topBar->setSize(0, skinConfInt["topBarHeight"]);
+	topBar->setBehave(LAY_HFILL);
+	top->addChild(topBar);
+
+	auto background = std::make_shared<Background>(*this);
+	top->addChild(background);
+	layers.insert(layers.begin(), background);
+
+	bottomBar = std::make_shared<BottomBar>(*this);
+	top->addChild(bottomBar);
 
 	initBG();
 
 	/* the menu may take a while to load, so we show the background here */
 	for (auto layer : layers)
 		layer->paint(*s);
+	layout->run();
+	layout->render(*s);
 	s->flip();
 
 	initMenu();
@@ -284,6 +304,16 @@ GMenu2X::~GMenu2X() {
 #endif
 }
 
+void GMenu2X::enableManualIcon(bool enable)
+{
+	bottomBar->enableManualIcon(enable);
+}
+
+void GMenu2X::showCpuFreq(unsigned long mhz)
+{
+	bottomBar->showCpuFreq(mhz);
+}
+
 void GMenu2X::initBG() {
 	bg.reset();
 	bgmain.reset();
@@ -298,27 +328,6 @@ void GMenu2X::initBG() {
 	drawBottomBar(*bg);
 
 	bgmain.reset(new OffscreenSurface(*bg));
-
-	{
-		auto sd = OffscreenSurface::loadImage(*this,
-				sc.getSkinFilePath("imgs/sd.png"));
-		if (sd) sd->blit(*bgmain, 3, bottomBarIconY);
-	}
-
-	cpuX = 32 + font->write(*bgmain, getDiskFree(getHome().c_str()),
-			22, bottomBarTextY, Font::HAlignLeft, Font::VAlignMiddle);
-
-#ifdef ENABLE_CPUFREQ
-	{
-		auto cpu_img = OffscreenSurface::loadImage(*this,
-				sc.getSkinFilePath("imgs/cpu.png"));
-		if (cpu_img) cpu_img->blit(*bgmain, cpuX, bottomBarIconY);
-	}
-	cpuX += 19;
-	manualX = cpuX + font->getTextWidth("300MHz") + 5;
-#else
-	manualX = cpuX;
-#endif
 
 	bgmain->convertToDisplayFormat();
 }
@@ -582,9 +591,10 @@ void GMenu2X::mainLoop() {
 		}
 
 		// Paint layers.
-		for (auto layer : layers) {
+		for (auto layer : layers)
 			layer->paint(*s);
-		}
+		layout->run();
+		layout->render(*s);
 		s->flip();
 
 		// Exit main loop once we have something to launch.
@@ -981,29 +991,6 @@ void GMenu2X::addSection() {
 void GMenu2X::deleteSection()
 {
 	menu->deleteSelectedSection();
-}
-
-string GMenu2X::getDiskFree(const char *path) {
-	
-	std::error_code ec;
-	auto space = compat::filesystem::space(path, ec);
-
-	string df = "";
-
-	if (!ec) {
-		// Make sure that the multiplication happens in 64 bits.
-		unsigned long freeMiB = space.free / (1024 * 1024);
-		unsigned long totalMiB = space.capacity / (1024 * 1024);
-		stringstream ss;
-		if (totalMiB >= 10000) {
-			ss << (freeMiB / 1024) << "." << ((freeMiB % 1024) * 10) / 1024 << "/"
-			   << (totalMiB / 1024) << "." << ((totalMiB % 1024) * 10) / 1024 << "GiB";
-		} else {
-			ss << freeMiB << "/" << totalMiB << "MiB";
-		}
-		ss >> df;
-	} else WARNING("statvfs failed with error '%s'.\n", ec.message().c_str());
-	return df;
 }
 
 int GMenu2X::drawButton(Surface& surface, const string &btn,

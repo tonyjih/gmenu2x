@@ -123,10 +123,19 @@ unsigned int Clock::Timer::callback()
 	return ms;
 }
 
-std::string Clock::getTime(bool is24)
+std::tuple<unsigned int, unsigned int> Clock::getCurrentTime()
 {
 	unsigned int hours, minutes;
 	timer->getTime(hours, minutes);
+
+	return std::make_tuple(hours, minutes);
+}
+
+std::string Clock::getTime(bool is24)
+{
+	unsigned int hours, minutes;
+
+	std::tie(hours, minutes) = getCurrentTime();
 
 	bool pm = hours >= 12;
 	if (!is24 && pm)

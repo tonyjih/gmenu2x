@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <tuple>
 
 
 /**
@@ -24,6 +25,8 @@ public:
 	 * Uses 24-hour format if is24 is true, otherwise AM/PM.
 	 */
 	std::string getTime(bool is24 = true);
+
+	std::tuple<unsigned int, unsigned int> getCurrentTime();
 
 private:
 	std::shared_ptr<Timer> timer;

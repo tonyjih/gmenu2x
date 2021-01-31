@@ -287,15 +287,11 @@ void Menu::paint(Surface &s) {
 
 	LinkApp *linkApp = selLinkApp();
 	if (linkApp && linkApp->isEditable()) {
-#ifdef ENABLE_CPUFREQ
-		font.write(s, gmenu2x.cpu.freqStr(linkApp->clock()),
-				gmenu2x.cpuX, gmenu2x.bottomBarTextY,
-				Font::HAlignLeft, Font::VAlignMiddle);
-#endif
-		//Manual indicator
-		if (!linkApp->getManual().empty())
-			sc.skinRes("imgs/manual.png")->blit(
-					s, gmenu2x.manualX, gmenu2x.bottomBarIconY);
+		gmenu2x.showCpuFreq(linkApp->clock());
+		gmenu2x.enableManualIcon(!linkApp->getManual().empty());
+	} else {
+		gmenu2x.showCpuFreq(0);
+		gmenu2x.enableManualIcon(false);
 	}
 }
 

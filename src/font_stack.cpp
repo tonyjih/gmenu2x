@@ -271,7 +271,7 @@ int FontStack::write(Surface &surface, compat::string_view text, int x, int y,
 	return max_width;
 }
 
-std::unique_ptr<OffscreenSurface> FontStack::render(
+std::shared_ptr<OffscreenSurface> FontStack::render(
     compat::string_view text) const {
 	std::vector<SDL_Surface *> surfaces;
 	int width = 0, height = 0;
@@ -287,7 +287,7 @@ std::unique_ptr<OffscreenSurface> FontStack::render(
 		width += s->w;
 		height = std::max(height, s->h);
 	});
-	if (surfaces.empty()) return std::unique_ptr<OffscreenSurface>();
+	if (surfaces.empty()) return std::shared_ptr<OffscreenSurface>();
 
 	SDL_Surface *concatenated;
 	if (surfaces.size() == 1) {
@@ -310,5 +310,5 @@ std::unique_ptr<OffscreenSurface> FontStack::render(
 
 	SDL_Surface *result = drawOutline(concatenated);
 	SDL_FreeSurface(concatenated);
-	return std::unique_ptr<OffscreenSurface>(new OffscreenSurface(result));
+	return std::shared_ptr<OffscreenSurface>(new OffscreenSurface(result));
 }

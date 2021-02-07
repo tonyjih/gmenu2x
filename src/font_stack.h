@@ -27,7 +27,7 @@ class FontStack {
 	          Font::HAlign halign = Font::HAlignLeft,
 	          Font::VAlign valign = Font::VAlignTop) const;
 
-	std::unique_ptr<OffscreenSurface> render(compat::string_view text) const;
+	std::shared_ptr<OffscreenSurface> render(compat::string_view text) const;
 
  private:
 	struct Slice {

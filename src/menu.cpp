@@ -240,7 +240,7 @@ void Menu::paint(Surface &s) {
 		icon->blit(s, x - 16, sectionLinkPadding, 32, 32);
 		
 		// Center text horizontally and align to bottom.
-		const auto *text_surface = section_text_surfaces[j].get();
+		auto text_surface = section_text_surfaces[j];
 		text_surface->blit(
 			s,
 			x - text_surface->width() / 2,

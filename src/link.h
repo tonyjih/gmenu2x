@@ -71,8 +71,8 @@ protected:
 	std::string launchMsg, icon, iconPath;
 
 	std::shared_ptr<OffscreenSurface> iconSurface;
-	std::unique_ptr<OffscreenSurface> titleSurface;
-	std::unique_ptr<OffscreenSurface> descriptionSurface;
+	std::shared_ptr<OffscreenSurface> titleSurface;
+	std::shared_ptr<OffscreenSurface> descriptionSurface;
 
 	virtual const std::string &searchIcon();
 	void setIconPath(const std::string &icon);

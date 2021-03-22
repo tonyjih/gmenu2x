@@ -68,14 +68,19 @@ void Link::updateDescriptionSurface() {
 }
 
 void Link::paint() {
+	uint32_t iconX, padding;
 	Surface& s = *gmenu2x.s;
+
+	iconX = rect.x + (rect.w - iconSurface->width()) / 2;
+	padding = (gmenu2x.skinConfInt["linkHeight"] - iconSurface->height()
+		   - gmenu2x.font->getLineSpacing()) / 3;
 
 	if (iconSurface) {
 		iconSurface->blit(s, iconX, rect.y + padding);
 	}
 
 	SDL_Rect coords = {
-		static_cast<Sint16>(iconX + 16),
+		static_cast<Sint16>(rect.x + rect.w / 2),
 		static_cast<Sint16>(rect.y + gmenu2x.skinConfInt["linkHeight"] - padding),
 		0, 0
 	};
@@ -182,18 +187,11 @@ void Link::setIconPath(const string &icon) {
 void Link::setSize(int w, int h) {
 	rect.w = w;
 	rect.h = h;
-	recalcCoordinates();
 }
 
 void Link::setPosition(int x, int y) {
 	rect.x = x;
 	rect.y = y;
-	recalcCoordinates();
-}
-
-void Link::recalcCoordinates() {
-	iconX = rect.x+(rect.w-32)/2;
-	padding = (gmenu2x.skinConfInt["linkHeight"] - 32 - gmenu2x.font->getLineSpacing()) / 3;
 }
 
 void Link::run() {

@@ -79,14 +79,12 @@ protected:
 	void updateSurfaces();
 
 private:
-	void recalcCoordinates();
 	void updateTitleSurface();
 	void updateDescriptionSurface();
 
 	Action action;
 
 	SDL_Rect rect;
-	uint32_t iconX, padding;
 	int lastTick;
 	std::string title, description;
 };

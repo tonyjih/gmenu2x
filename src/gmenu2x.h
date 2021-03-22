@@ -120,7 +120,7 @@ public:
 	}
 
 	const unsigned int getUiScale() const {
-		return const_cast<ConfIntHash&>(skinConfInt)["uiScale"];
+		return const_cast<ConfIntHash&>(skinConfInt)["uiScale"] ?: 1;
 	}
 
 	/* Returns the home directory of gmenu2x, usually

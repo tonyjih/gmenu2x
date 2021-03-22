@@ -82,7 +82,16 @@ bool WallpaperDialog::exec()
 			firstElement = selected;
 
 		//Wallpaper
-		gmenu2x.sc[((string)"skin:wallpapers/" + wallpapers[selected]).c_str()]->blit(s, 0, 0);
+		auto imgpath = gmenu2x.sc.getSkinFilePath((string)"wallpapers/" + wallpapers[selected]);
+		std::shared_ptr<OffscreenSurface> img;
+
+		if (gmenu2x.sc.exists(imgpath))
+			img = gmenu2x.sc[imgpath];
+		else
+			img = gmenu2x.sc.add(imgpath, gmenu2x.width(), gmenu2x.height());
+
+		if (img)
+			img->blit(s, 0, 0);
 
 		gmenu2x.drawTopBar(s);
 		gmenu2x.drawBottomBar(s);

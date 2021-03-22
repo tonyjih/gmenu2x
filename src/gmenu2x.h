@@ -169,9 +169,9 @@ public:
 	Translator tr;
 	std::unique_ptr<OutputSurface> s;
 	/** Background with empty top and bottom bar. */
-	std::unique_ptr<OffscreenSurface> bg;
+	std::shared_ptr<OffscreenSurface> bg;
 	/** Background with empty top bar and a partially filled bottom bar. */
-	std::unique_ptr<OffscreenSurface> bgmain;
+	std::shared_ptr<OffscreenSurface> bgmain;
 	std::unique_ptr<FontStack> font;
 
 	//Status functions

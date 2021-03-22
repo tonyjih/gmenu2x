@@ -112,13 +112,9 @@ std::shared_ptr<OffscreenSurface> SurfaceCollection::add(const string &path) {
 
 	DEBUG("Adding surface: '%s'\n", path.c_str());
 	auto surface = OffscreenSurface::loadImage(*gmenu2x, filePath);
-	if (!surface)
-		return nullptr;
-
-	auto ptr = std::shared_ptr<OffscreenSurface>(surface.release());
-
-	surfaces[path] = ptr;
-	return ptr;
+	if (surface)
+		surfaces[path] = surface;
+	return surface;
 }
 
 std::shared_ptr<OffscreenSurface> SurfaceCollection::addSkinRes(const string &path, bool useDefault) {
@@ -134,13 +130,9 @@ std::shared_ptr<OffscreenSurface> SurfaceCollection::addSkinRes(const string &pa
 
 	DEBUG("Adding skin surface: '%s'\n", path.c_str());
 	auto surface = OffscreenSurface::loadImage(*gmenu2x, skinpath);
-	if (!surface)
-		return nullptr;
-
-	auto ptr = std::shared_ptr<OffscreenSurface>(surface.release());
-
-	surfaces[path] = ptr;
-	return ptr;
+	if (surface)
+		surfaces[path] = surface;
+	return surface;
 }
 
 void SurfaceCollection::del(const string &path) {

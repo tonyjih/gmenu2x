@@ -109,9 +109,9 @@ private:
  */
 class OffscreenSurface: public Surface {
 public:
-	static std::unique_ptr<OffscreenSurface> emptySurface(
+	static std::shared_ptr<OffscreenSurface> emptySurface(
 			const GMenu2X &gmenu2x, int width, int height);
-	static std::unique_ptr<OffscreenSurface> loadImage(
+	static std::shared_ptr<OffscreenSurface> loadImage(
 			const GMenu2X &gmenu2x, std::string const& img,
 			bool loadAlpha = true);
 

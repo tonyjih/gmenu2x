@@ -284,14 +284,16 @@ void Surface::fillRectAlpha(SDL_Rect rect, RGBAColor c) {
 
 // OffscreenSurface:
 
-unique_ptr<OffscreenSurface> OffscreenSurface::emptySurface(
+shared_ptr<OffscreenSurface> OffscreenSurface::emptySurface(
 		const GMenu2X &gmenu2x, int width, int height)
 {
 	unsigned int uiScale = gmenu2x.getUiScale();
 	SDL_Surface *stretched,
 		    *raw = SDL_CreateRGBSurface(
 			SDL_SWSURFACE, width, height, 32, 0, 0, 0, 0);
-	if (!raw) return unique_ptr<OffscreenSurface>();
+	if (!raw)
+		return shared_ptr<OffscreenSurface>();
+
 	SDL_FillRect(raw, nullptr, SDL_MapRGB(raw->format, 0, 0, 0));
 
 	if (uiScale > 1) {
@@ -300,17 +302,17 @@ unique_ptr<OffscreenSurface> OffscreenSurface::emptySurface(
 		raw = stretched;
 	}
 
-	return unique_ptr<OffscreenSurface>(new OffscreenSurface(raw));
+	return shared_ptr<OffscreenSurface>(new OffscreenSurface(raw));
 }
 
-unique_ptr<OffscreenSurface> OffscreenSurface::loadImage(
+shared_ptr<OffscreenSurface> OffscreenSurface::loadImage(
 		const GMenu2X &gmenu2x, string const& img, bool loadAlpha)
 {
 	unsigned int uiScale = gmenu2x.getUiScale();
 	SDL_Surface *stretched, *raw = loadPNG(img, loadAlpha);
 	if (!raw) {
 		DEBUG("Couldn't load surface '%s'\n", img.c_str());
-		return unique_ptr<OffscreenSurface>();
+		return shared_ptr<OffscreenSurface>();
 	}
 
 	if (uiScale > 1) {
@@ -319,7 +321,7 @@ unique_ptr<OffscreenSurface> OffscreenSurface::loadImage(
 		raw = stretched;
 	}
 
-	return unique_ptr<OffscreenSurface>(new OffscreenSurface(raw));
+	return shared_ptr<OffscreenSurface>(new OffscreenSurface(raw));
 }
 
 OffscreenSurface::OffscreenSurface(OffscreenSurface&& other)

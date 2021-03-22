@@ -806,11 +806,6 @@ void GMenu2X::setSkin(const string &skin, bool setWallpaper) {
 			WARNING("Unable to find wallpaper defined on skin %s\n", skin.c_str());
 	}
 
-	evalIntConf(skinConfInt, "topBarHeight", 50, 32, 120);
-	evalIntConf(skinConfInt, "bottomBarHeight", 20, 20, 120);
-	evalIntConf(skinConfInt, "linkHeight", 50, 32, 120);
-	evalIntConf(skinConfInt, "linkWidth", 80, 32, 120);
-
 	const bool fontChanged = initFont();
 	if (menu != nullptr) {
 		menu->skinUpdated();

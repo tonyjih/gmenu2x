@@ -108,7 +108,10 @@ void Link::paintDescription(int center_x, int center_y)
 
 void Link::updateSurfaces()
 {
-	iconSurface = gmenu2x.sc[getIconPath()];
+	unsigned int uiScale = gmenu2x.getUiScale();
+	iconSurface = gmenu2x.sc.add(getIconPath(),
+				     32 * uiScale,
+				     32 * uiScale);
 }
 
 const string &Link::getTitle() const {

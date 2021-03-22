@@ -424,6 +424,9 @@ void GMenu2X::readConfig() {
 	conffile = GMENU2X_SYSTEM_DIR "/gmenu2x.conf";
 	readConfig(conffile);
 
+	if (confStr["skin"].empty() || sc.getSkinPath(confStr["skin"]).empty())
+		confStr["skin"] = "Default";
+
 	if (!confStr["lang"].empty())
 		tr.setLang(confStr["lang"]);
 }
@@ -431,9 +434,6 @@ void GMenu2X::readConfig() {
 void GMenu2X::sanitizeConfig() {
 	if (!confStr["wallpaper"].empty() && !fileExists(confStr["wallpaper"]))
 		confStr.erase("wallpaper");
-
-	if (confStr["skin"].empty() || sc.getSkinPath(confStr["skin"]).empty())
-		confStr["skin"] = "Default";
 
 	evalIntConf( confInt, "outputLogs", 0, 0,1 );
 	evalIntConf( confInt, "trimExt", 0, 0,1);

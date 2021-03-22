@@ -319,7 +319,7 @@ void GMenu2X::initBG() {
 	bgmain.reset();
 
 	// Load wallpaper.
-	bg = OffscreenSurface::loadImage(*this, confStr["wallpaper"]);
+	bg = OffscreenSurface::loadImage(*this, confStr["wallpaper"], width(), height());
 	if (!bg) {
 		bg = OffscreenSurface::emptySurface(*this, width(), height());
 	}

@@ -251,15 +251,15 @@ GMenu2X::GMenu2X() : input(*this), sc(this)
 	bottomBarIconY = height() - 18;
 	bottomBarTextY = height() - 10;
 
+	bg = NULL;
+	font = NULL;
+	setSkin(confStr["skin"], !fileExists(confStr["wallpaper"]));
+
 	if (!fileExists(confStr["wallpaper"])) {
 		DEBUG("No wallpaper defined; we will take the default one.\n");
 		confStr["wallpaper"] = getSystemSkinPath("Default")
 				     + "/wallpapers/default.png";
 	}
-
-	bg = NULL;
-	font = NULL;
-	setSkin(confStr["skin"], !fileExists(confStr["wallpaper"]));
 
 	auto topBar = std::make_shared<LayoutItem>();
 	topBar->setSize(0, skinConfInt["topBarHeight"]);

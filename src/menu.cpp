@@ -237,7 +237,7 @@ void Menu::paint(Surface &s) {
 			int t = sectionDelta < 0 ? sectionDelta + linkWidth : sectionDelta;
 			x += (((t * t) / linkWidth) * t) / linkWidth;
 		}
-		icon->blit(s, x - 16, sectionLinkPadding, 32, 32);
+		icon->blit(s, x - 16, sectionLinkPadding);
 		
 		// Center text horizontally and align to bottom.
 		auto text_surface = section_text_surfaces[j];

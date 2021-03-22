@@ -71,7 +71,7 @@ void Link::paint() {
 	Surface& s = *gmenu2x.s;
 
 	if (iconSurface) {
-		iconSurface->blit(s, iconX, rect.y+padding, 32,32);
+		iconSurface->blit(s, iconX, rect.y + padding);
 	}
 
 	SDL_Rect coords = {

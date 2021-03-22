@@ -114,9 +114,13 @@ void Link::paintDescription(int center_x, int center_y)
 void Link::updateSurfaces()
 {
 	unsigned int uiScale = gmenu2x.getUiScale();
-	iconSurface = gmenu2x.sc.add(getIconPath(),
-				     32 * uiScale,
-				     32 * uiScale);
+
+	iconSurface = gmenu2x.sc.add(getIconPath(), 32 * uiScale, 32 * uiScale);
+
+	if (!iconSurface) {
+		iconPath = gmenu2x.sc.getSkinFilePath("icons/generic.png");
+		iconSurface = gmenu2x.sc.add(getIconPath(), 32 * uiScale, 32 * uiScale);
+	}
 }
 
 const string &Link::getTitle() const {

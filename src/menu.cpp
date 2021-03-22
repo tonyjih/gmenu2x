@@ -148,7 +148,12 @@ void Menu::skinUpdated() {
 	//reload section icons
 	decltype(links)::size_type i = 0;
 	for (auto& sectionName : sections) {
-		gmenu2x.sc["skin:sections/" + sectionName + ".png"];
+		auto iconpath = (string)"skin:sections/" + sectionName + ".png";
+
+		if (!gmenu2x.sc.exists(iconpath)) {
+			const int uiScale = gmenu2x.getUiScale();
+			gmenu2x.sc.add(iconpath, 32 * uiScale, 32 * uiScale);
+		}
 
 		for (auto& link : links[i]) {
 			link->loadIcon();
@@ -204,6 +209,8 @@ void Menu::paint(Surface &s) {
 	const int linkHeight = skinConfInt["linkHeight"];
 	RGBAColor &selectionBgColor = gmenu2x.skinConfColors[COLOR_SELECTION_BG];
 
+	const int uiScale = gmenu2x.getUiScale();
+
 	// Apply section header animation.
 	int leftSection, rightSection;
 	calcSectionRange(leftSection, rightSection);
@@ -219,7 +226,7 @@ void Menu::paint(Surface &s) {
 
 	// Paint section headers.
 	s.box(width / 2  - linkWidth / 2, 0, linkWidth, topBarHeight, selectionBgColor);
-	const uint32_t sectionLinkPadding = (topBarHeight - 32 - font.getLineSpacing()) / 3;
+	const uint32_t sectionLinkPadding = (topBarHeight - 32 * uiScale - font.getLineSpacing()) / 3;
 	const uint32_t numSections = sections.size();
 	for (int i = leftSection; i <= rightSection; i++) {
 		uint32_t j = (centerSection + numSections + i) % numSections;
@@ -237,8 +244,8 @@ void Menu::paint(Surface &s) {
 			int t = sectionDelta < 0 ? sectionDelta + linkWidth : sectionDelta;
 			x += (((t * t) / linkWidth) * t) / linkWidth;
 		}
-		icon->blit(s, x - 16, sectionLinkPadding);
-		
+		icon->blit(s, x - 16 * uiScale, sectionLinkPadding);
+
 		// Center text horizontally and align to bottom.
 		auto text_surface = section_text_surfaces[j];
 		text_surface->blit(

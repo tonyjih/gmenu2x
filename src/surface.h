@@ -112,7 +112,8 @@ public:
 	static std::shared_ptr<OffscreenSurface> emptySurface(
 			const GMenu2X &gmenu2x, int width, int height);
 	static std::shared_ptr<OffscreenSurface> loadImage(
-			const GMenu2X &gmenu2x, std::string const& img,
+			const GMenu2X &gmenu2x, const std::string& img,
+			unsigned int width = 0, unsigned int height = 0,
 			bool loadAlpha = true);
 
 	OffscreenSurface(Surface const& other) : Surface(other) {}

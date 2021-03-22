@@ -300,17 +300,20 @@ shared_ptr<OffscreenSurface> OffscreenSurface::emptySurface(
 }
 
 shared_ptr<OffscreenSurface> OffscreenSurface::loadImage(
-		const GMenu2X &gmenu2x, string const& img, bool loadAlpha)
+		const GMenu2X &gmenu2x, const string& img,
+		unsigned int width, unsigned int height, bool loadAlpha)
 {
-	unsigned int uiScale = gmenu2x.getUiScale();
 	SDL_Surface *stretched, *raw = loadPNG(img, loadAlpha);
 	if (!raw) {
 		DEBUG("Couldn't load surface '%s'\n", img.c_str());
 		return shared_ptr<OffscreenSurface>();
 	}
 
-	if (uiScale > 1) {
-		stretched = zoomSurface(raw, uiScale, uiScale, true);
+	if ((width && raw->w != width) || (height && raw->h != height)) {
+		float wratio = width ? (float)width / (float)raw->w : 1.0;
+		float hratio = height ? (float)height / (float)raw->h : 1.0;
+
+		stretched = zoomSurface(raw, wratio, hratio, true);
 		SDL_FreeSurface(raw);
 		raw = stretched;
 	}

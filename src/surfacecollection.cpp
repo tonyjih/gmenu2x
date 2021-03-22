@@ -93,7 +93,9 @@ bool SurfaceCollection::exists(const string &path) {
 	return surfaces.find(path) != surfaces.end();
 }
 
-std::shared_ptr<OffscreenSurface> SurfaceCollection::add(const string &path) {
+std::shared_ptr<OffscreenSurface> SurfaceCollection::add(const string &path,
+							 unsigned int width,
+							 unsigned int height) {
 	if (path.empty())
 		return nullptr;
 
@@ -111,7 +113,7 @@ std::shared_ptr<OffscreenSurface> SurfaceCollection::add(const string &path) {
 	}
 
 	DEBUG("Adding surface: '%s'\n", path.c_str());
-	auto surface = OffscreenSurface::loadImage(*gmenu2x, filePath);
+	auto surface = OffscreenSurface::loadImage(*gmenu2x, filePath, width, height);
 	if (surface)
 		surfaces[path] = surface;
 	return surface;

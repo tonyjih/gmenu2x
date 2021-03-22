@@ -53,10 +53,12 @@ public:
 	std::shared_ptr<OffscreenSurface> operator[](const std::string &);
 	std::shared_ptr<OffscreenSurface> skinRes(const std::string &key, bool useDefault = true);
 
+	std::shared_ptr<OffscreenSurface> add(const std::string &path,
+					      unsigned int width = 0,
+					      unsigned int height = 0);
+
 private:
 	using SurfaceHash = std::unordered_map<std::string, std::shared_ptr<OffscreenSurface>>;
-
-	std::shared_ptr<OffscreenSurface> add(const std::string &path);
 
 	SurfaceHash surfaces;
 	std::string skin;

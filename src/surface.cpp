@@ -296,12 +296,6 @@ shared_ptr<OffscreenSurface> OffscreenSurface::emptySurface(
 
 	SDL_FillRect(raw, nullptr, SDL_MapRGB(raw->format, 0, 0, 0));
 
-	if (uiScale > 1) {
-		stretched = zoomSurface(raw, uiScale, uiScale, true);
-		SDL_FreeSurface(raw);
-		raw = stretched;
-	}
-
 	return shared_ptr<OffscreenSurface>(new OffscreenSurface(raw));
 }
 

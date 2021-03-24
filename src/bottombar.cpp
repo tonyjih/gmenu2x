@@ -163,7 +163,7 @@ void BottomBar::updateTimeText()
 	ss.fill('0');
 
 	/* C++ streams are beyond stupid */
-	ss << std::setfill('0') << std::setw(2) << timeIs24 ? hours : hours % 12;
+	ss << std::setfill('0') << std::setw(2) << (timeIs24 ? hours : hours % 12);
 	ss << ":" << std::setfill('0') << std::setw(2) << minutes;
 	if (!timeIs24)
 		ss << (hours >= 12 ? "pm" : "am");

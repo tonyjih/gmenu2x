@@ -700,42 +700,71 @@ void Menu::openPackage(std::string const& path, bool order)
 		return;
 	}
 
+	const char *name;
+
+	std::vector<std::string> platforms;
+	std::vector<std::vector<std::tuple<std::string, std::string> > > map;
+	std::vector<std::string> metadatas;
+
+	split(platforms, gmenu2x.confStr["opkPlatforms"], ",");
+	platforms.push_back("all");
+
+	map.resize(platforms.size());
+
 	for (;;) {
-		bool has_metadata = false;
-		const char *name;
-
-		std::vector<std::string> platforms;
-
-		split(platforms, gmenu2x.confStr["opkPlatforms"], ",");
-		platforms.push_back("all");
-
-		for (;;) {
-			string::size_type pos;
-			int ret = opk_open_metadata(opk, &name);
-			if (ret < 0) {
-				ERROR("Error while loading meta-data\n");
-				break;
-			} else if (!ret)
-			  break;
-
-			/* Strip .desktop */
-			string metadata(name);
-			pos = metadata.rfind('.');
-			metadata = metadata.substr(0, pos);
-
-			/* Keep only the platform name */
-			pos = metadata.rfind('.');
-			metadata = metadata.substr(pos + 1);
-
-			if (std::find(platforms.begin(), platforms.end(),
-				      metadata) != platforms.end()) {
-				has_metadata = true;
-				break;
-			}
-		}
-
-		if (!has_metadata)
+		string::size_type pos;
+		int ret = opk_open_metadata(opk, &name);
+		if (ret < 0) {
+			ERROR("Error while loading meta-data\n");
+			break;
+		} else if (!ret)
 		  break;
+
+		std::vector<std::string> vec;
+
+		string metadata(name);
+		split(vec, metadata, ".");
+
+		auto it = std::find(platforms.begin(), platforms.end(), vec[1]);
+		if (it != platforms.end()) {
+			auto distance = std::distance(platforms.begin(), it);
+
+			map[distance].push_back(std::make_tuple(vec[0], metadata));
+		}
+	}
+
+	for (unsigned int i = 0; i < map.size() - 1; i++) {
+		for (const auto& each: map[i]) {
+			auto it = std::find_if(map[i + 1].begin(), map[i + 1].end(),
+					       [&](const auto& arg) {
+				return !std::get<0>(arg).compare(std::get<0>(each));
+			});
+
+			if (it != map[i + 1].end())
+				map[i + 1].erase(it);
+		}
+	}
+
+	for (const auto& platform: map)
+		for (const auto& each: platform)
+			metadatas.push_back(std::get<1>(each));
+
+	/* Re-open OPK, since we advanced in the file */
+	opk_close(opk);
+	opk = opk_open(path.c_str());
+
+	for (;;) {
+		int ret = opk_open_metadata(opk, &name);
+		if (!ret)
+			break;
+
+		auto it = std::find_if(metadatas.begin(), metadatas.end(),
+				       [&](const auto& metadata) {
+			return !metadata.compare(name);
+		});
+
+		if (it == metadatas.end())
+			continue;
 
 		// Note: OPK links can only be deleted by removing the OPK itself,
 		//       but that is not something we want to do in the menu,
